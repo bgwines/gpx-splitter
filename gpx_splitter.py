@@ -189,13 +189,16 @@ def validate_args():
 
 
 def main():
+    validate_args()
+
     tree = ET.parse(sys.argv[1])
     print_file_summary(tree)
     register_namespace(tree)
-    timestamps = [None] + prompt_user_for_timestamps(tree) + [None]
+    timestamps_utc = [None] + prompt_user_for_timestamps(tree) + [None]
 
     filename = sys.argv[1]
-    trees = [split_gpx(ts[0], ts[1]) for ts in zip(timestamps, timestamps[1:])]
+    trees = [split_gpx(ts[0], ts[1])
+             for ts in zip(timestamps_utc, timestamps_utc[1:])]
     write_trees(trees)
 
 
