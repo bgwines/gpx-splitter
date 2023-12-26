@@ -23,7 +23,7 @@ import xml.etree.ElementTree as ET
 # >>> x = p[0]
 # >>> y = p[1]
 # >>> x.text
-# '1213.3' # not sure yet what this is
+# '1213.3' # elevation, in meters
 # >>> y.text
 # '2023-10-29T12:27:17Z'
 # >>>
@@ -53,6 +53,16 @@ def utc_to_local(utc_dt):
     return utc_dt.replace(tzinfo=datetime.timezone.utc).astimezone(tz=None)
 
 
+def local_to_utc(local_dt):
+    return local_dt.replace(tzinfo=None).astimezone(tz=datetime.timezone.utc)
+
+
+def local_utc_offset():
+    naive = datetime.now()
+    timezone = pytz.timezone(sys_tz())
+    return timezone.localize(naive).utcoffset()
+
+
 
 def print_file_summary(tree):
     start, end = parse_for_boundary_timestamps(tree)
@@ -61,8 +71,8 @@ def print_file_summary(tree):
     print(f"{sys.argv[1]} is a GPX file by {bold(creator)}."
           f" It spans {bold(span)} hours.\n")
 
-    print(f"The start of the GPX file is {bold(utc_to_local(start))} ({sys_tz()})")
-    print(f"The   end of the GPX file is {bold(utc_to_local(end))} ({sys_tz()})")
+    print(f"The start of the GPX file is {bold(utc_to_local(start))} ({sys_tz()}) / {start} (UTC)")
+    print(f"The   end of the GPX file is {bold(utc_to_local(end))} ({sys_tz()}) / {end} (UTC)")
 
 
 def gpx_time_string_to_timestamp(s):
@@ -107,11 +117,9 @@ def get_latlongs_node(tree):
 
 
 
-def split_gpx(start_s, end_s):
+def split_gpx(start, end):
     tree = ET.parse(sys.argv[1])
     latlongs_node = get_latlongs_node(tree)
-    start = gpx_time_string_to_timestamp(start_s)
-    end = gpx_time_string_to_timestamp(end_s)
     for e in latlongs_node.findall(LATLONGS_CHILDREN_TAG):
         # using root.findall() to avoid removal during traversal
         assert len(e) == 2, f"GPX file is not in a valid format: {e}"
@@ -134,37 +142,63 @@ def register_namespace(tree):
     ET.register_namespace("", namespace)
 
 
-def parse_for_boundary_timestamps(tree):
+def parse_for_boundary_timestamp_strings(tree):
     latlongs_node = get_latlongs_node(tree)
     nodes = latlongs_node.findall(LATLONGS_CHILDREN_TAG)
-    return (gpx_time_string_to_timestamp(nodes[0][1].text),
-            gpx_time_string_to_timestamp(nodes[-1][1].text))
+    return (nodes[0][1].text, nodes[-1][1].text)
+
+
+def parse_for_boundary_timestamps(tree):
+    boundaries = parse_for_boundary_timestamp_strings(tree)
+    return (gpx_time_string_to_timestamp(boundaries[0]),
+            gpx_time_string_to_timestamp(boundaries[1]))
 
 
 def prompt_user_for_timestamps(tree):
-    print("Please enter timestamps upon which to split, one by one,"
-          " in ISO 8601 format, e.g. 2023-10-29T14:25:33. Use your current"
-          f" local timezone ({sys_tz()}). Enter an empty response to indicate"
-          " when you're done.")
+    """Returned timestamps are in UTC"""
+
+    start = parse_for_boundary_timestamp_strings(tree)[0]
+    starting_date = start[:start.find('T')]
+    print(f"Please enter timestamps in your local timezone ({sys_tz()}), one by"
+          " one. Each one may be in any of the following formats:"
+          "\n\t1. 2023-10-29T14:25:33"
+          f"\n\t2. 14:25:33 (date inferred as {starting_date})"
+          "\n\t3. 14:25 (seconds inferred as :00 and date inferred"
+          f" as {starting_date}"
+          "\nHit Enter when you're done.")
+
     timestamps = []
-    while not timestamps or timestamps[-1]:
-        timestamps.append(input("... "))
-    return timestamps[:-1]
+    while True:
+        ts = input("... ")
+        if ts == "":
+            break
+
+        if "T" not in ts:
+            ts = f"{starting_date}T{ts}"
+            n_colons = len([c for c in ts if c == ":"])
+            if n_colons == 1:
+                ts = f"{ts}:00"
+
+        timestamps.append(local_to_utc(datetime.datetime.fromisoformat(ts)))
+
+    print("UTC timestamps that will be used:")
+    for t in timestamps:
+        print(f"\t{t}")
+    return timestamps
 
 
-def main():
-    if len(sys.argv) != 2 or not sys.argv[1].endswith(".gpx"):
+def validate_args():
+    if len(sys.argv) != 2:
+        sys.exit(1)
+    if not sys.argv[1].endswith(".gpx"):
         sys.exit(1)
 
 
-    # TODO:
-    #   * interactively prompt user with time boundaries in their TZ
-    #   * display???
+def main():
     tree = ET.parse(sys.argv[1])
     print_file_summary(tree)
     register_namespace(tree)
     timestamps = [None] + prompt_user_for_timestamps(tree) + [None]
-    sys.exit(0)
 
     filename = sys.argv[1]
     trees = [split_gpx(ts[0], ts[1]) for ts in zip(timestamps, timestamps[1:])]
