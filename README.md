@@ -10,6 +10,7 @@ Open the "Terminal" application, `cd` to the directory containing the file and t
 
 ```
 $ cd ~/Downloads/gpx-splitter
+$ mv ../scarface.gpx .
 $ ./gpx_splitter.py scarface.gpx
 scarface.gpx is a GPX file by **GaiaGPS**. It spans **15:13:14** hours.
 
