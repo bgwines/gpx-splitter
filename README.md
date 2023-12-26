@@ -6,9 +6,10 @@ Download this script (as a Zip file):
 
 The GPX file must be placed in the same directory as this script.
 
-Open the "Terminal" application, `cd` to the directory containing the file and the script (e.g. `cd ~/Downloads`), and run it as follows:
+Open the "Terminal" application, `cd` to the directory containing the file and the script, and run it as follows:
 
 ```
+$ cd ~/Downloads/gpx-splitter
 $ ./gpx_splitter.py scarface.gpx
 scarface.gpx is a GPX file by **GaiaGPS**. It spans **15:13:14** hours.
 
