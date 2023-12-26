@@ -1,5 +1,8 @@
 ## Example usage:
 
+The GPX file must be placed in the same directory as this script.
+
+```
 $ ./gpx_splitter.py scarface.gpx
 scarface.gpx is a GPX file by **GaiaGPS**. It spans **15:13:14** hours.
 
@@ -26,3 +29,4 @@ Wrote scarface-split-1.gpx
 Wrote scarface-split-2.gpx
 Wrote scarface-split-3.gpx
 Wrote scarface-split-4.gpx
+```
