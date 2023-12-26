@@ -59,8 +59,8 @@ def print_file_summary(tree):
     print(f"{sys.argv[1]} is a GPX file by {bold(creator)}."
           f" It spans {bold(span)} hours.\n")
 
-    print(f"The start of the GPX file is {bold(utc_to_local(start))} ({sys_tz()}) / {start} (UTC)")
-    print(f"The   end of the GPX file is {bold(utc_to_local(end))} ({sys_tz()}) / {end} (UTC)")
+    print(f"The start of the GPX file is {bold(utc_to_local(start))} ({sys_tz()})")
+    print(f"The   end of the GPX file is {bold(utc_to_local(end))} ({sys_tz()})")
 
 
 def gpx_time_string_to_timestamp(s):
