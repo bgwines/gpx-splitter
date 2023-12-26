@@ -17,18 +17,6 @@ import xml.etree.ElementTree as ET
 #  ('{http://www.w3.org/2001/XMLSchema-instance}schemaLocation',
 #   'http://www.topografix.com/GPX/1/1
 #    http://www.topografix.com/GPX/1/1/gpx.xsd')]
-#
-# Coordinate-timestamp pairs live at tree.getroot()[0][3]
-# >>> p = tree.getroot()[0][3][0]
-# >>> x = p[0]
-# >>> y = p[1]
-# >>> x.text
-# '1213.3' # elevation, in meters
-# >>> y.text
-# '2023-10-29T12:27:17Z'
-# >>>
-# >>> p.items()
-# [('lat', '37.734814'), ('lon', '-119.566125')]
 
 
 TIMESTAMP_EX = "TODO"
@@ -112,14 +100,19 @@ def write_trees(trees):
         print(f"Wrote {name}")
 
 
-def get_latlongs_node(tree):
-    return tree.getroot()[0][3]
-
+def get_latlongs_node(node):
+    if node.tag.endswith("trkseg"):
+        return node
+    for child in node:
+        candidate = get_latlongs_node(child)
+        if candidate:
+            return candidate
+    return None
 
 
 def split_gpx(start, end):
     tree = ET.parse(sys.argv[1])
-    latlongs_node = get_latlongs_node(tree)
+    latlongs_node = get_latlongs_node(tree.getroot())
     for e in latlongs_node.findall(LATLONGS_CHILDREN_TAG):
         # using root.findall() to avoid removal during traversal
         assert len(e) == 2, f"GPX file is not in a valid format: {e}"
@@ -143,7 +136,7 @@ def register_namespace(tree):
 
 
 def parse_for_boundary_timestamp_strings(tree):
-    latlongs_node = get_latlongs_node(tree)
+    latlongs_node = get_latlongs_node(tree.getroot())
     nodes = latlongs_node.findall(LATLONGS_CHILDREN_TAG)
     return (nodes[0][1].text, nodes[-1][1].text)
 
@@ -184,6 +177,7 @@ def prompt_user_for_timestamps(tree):
     print("UTC timestamps that will be used:")
     for t in timestamps:
         print(f"\t{t}")
+    print("")
     return timestamps
 
 
