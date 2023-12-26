@@ -1,7 +1,12 @@
 
 ## Example usage:
 
+Download this script (as a Zip file):
+<img width="647" alt="Screenshot 2023-12-26 at 1 55 02 PM" src="https://github.com/bgwines/gpx-splitter/assets/2442246/2d935179-ae94-453e-b93f-1243c486bb50">
+
 The GPX file must be placed in the same directory as this script.
+
+Open the "Terminal" application, `cd` to the directory containing the file and the script (e.g. `cd ~/Downloads`), and run it as follows:
 
 ```
 $ ./gpx_splitter.py scarface.gpx
