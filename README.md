@@ -34,12 +34,12 @@ Wrote scarface-split-4.gpx
 ```
 
 Here's the output, on GaiaGPS:
-Split 1: https://www.gaiagps.com/datasummary/folder/128e10d9-3082-4efe-8bb8-e07d940bd72b/?layer=GaiaTopoRasterFeet
-Split 2 (contains some issue; not sure what; the file looks fine): https://www.gaiagps.com/datasummary/folder/d6b9650e-78a2-46eb-9a7a-52c1fcb03506/?layer=GaiaTopoRasterFeet
-Split 3: https://www.gaiagps.com/datasummary/folder/fb5fb20d-f638-4703-ad0a-622df9972973/?layer=GaiaTopoRasterFeet
-Split 4: https://www.gaiagps.com/datasummary/folder/07ad2495-f213-4ab5-8e0e-a5e0743dc5b1/?layer=GaiaTopoRasterFeet
+* Split 1: https://www.gaiagps.com/datasummary/folder/128e10d9-3082-4efe-8bb8-e07d940bd72b/?layer=GaiaTopoRasterFeet
+* Split 2 (contains some issue; not sure what; the file looks fine): https://www.gaiagps.com/datasummary/folder/d6b9650e-78a2-46eb-9a7a-52c1fcb03506/?layer=GaiaTopoRasterFeet
+* Split 3: https://www.gaiagps.com/datasummary/folder/fb5fb20d-f638-4703-ad0a-622df9972973/?layer=GaiaTopoRasterFeet
+* Split 4: https://www.gaiagps.com/datasummary/folder/07ad2495-f213-4ab5-8e0e-a5e0743dc5b1/?layer=GaiaTopoRasterFeet
 
 A second test (which had no issues):
-Stinson Beach <-> Mt. Tam, Split 1: https://www.gaiagps.com/datasummary/folder/94247d82-0efb-48b0-90f2-6db5cb9f12d6/?layer=GaiaTopoRasterFeet
-Stinson Beach <-> Mt. Tam, Split 2: https://www.gaiagps.com/datasummary/folder/8814fe58-0583-4177-b4c2-93172ae1ce2c/?layer=GaiaTopoRasterFeet
-Stinson Beach <-> Mt. Tam, Split 3: https://www.gaiagps.com/datasummary/folder/f5fda520-e7fe-4e64-9d73-1ee9bd3131ed/?layer=GaiaTopoRasterFeet
+* Stinson Beach <-> Mt. Tam, Split 1: https://www.gaiagps.com/datasummary/folder/94247d82-0efb-48b0-90f2-6db5cb9f12d6/?layer=GaiaTopoRasterFeet
+* Stinson Beach <-> Mt. Tam, Split 2: https://www.gaiagps.com/datasummary/folder/8814fe58-0583-4177-b4c2-93172ae1ce2c/?layer=GaiaTopoRasterFeet
+* Stinson Beach <-> Mt. Tam, Split 3: https://www.gaiagps.com/datasummary/folder/f5fda520-e7fe-4e64-9d73-1ee9bd3131ed/?layer=GaiaTopoRasterFeet
